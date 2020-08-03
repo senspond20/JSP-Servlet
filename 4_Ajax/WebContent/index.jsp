@@ -27,26 +27,29 @@ body {
    <h3>1. 버튼 선택 시 전송 값 서버에 출력</h3>
    이름 : <input type="text" id="myName" />
    <button id="nameBtn">이름 전송</button>
+   <input type ="hidden" id="myNameHidden"/>
    
    <script>
       $('#nameBtn').click(function(){
          var name = $('#myName').val();
-         console.log(name);
+         var nameHidden = $('#myNameHidden');
+//          console.log(name);
          
          // ajax 시작!!!
          $.ajax({
             url: 'jQueryTest1.do',
             data: {name:name},
 //                뒤에 있는 것이 내가 보낼 값 // 앞에 있는 것이 포장
-            type: 'post',
+            type: 'get',
             success: function(data){
                console.log('서버 성공 시 호출되는 함수');
                console.log(data);
+               nameHidden.val(data);
             },
             error: function(data) {
                console.log('서버 전송 실패시 호출되는 함수')
             },
-            complate: function(data){
+            complete: function(data){
                console.log('성공 여부에 상관 없이 무조건 호출되는 함수')
             }
          });
@@ -63,6 +66,8 @@ body {
          $.ajax({
             url: 'jQueryTest2.do',
             success: function(data){
+           	
+            	data += $('#myNameHidden').val();
                $('#p1').text(data)
                console.log(data);
             }
@@ -107,14 +112,15 @@ body {
 		$('#studentTest').click(function(){
 			var student1 = $('#student1').val();
 			var student2 = $('#student2').val();
-			var student3 = $('#student3').val();
-			
+			var student3 = $('#student3').val();			
 			var students = {student1:student1, student2:student2, student3:student3};
 			
 			$.ajax({
 				url: "jQueryTest4.do",
-				data: students
-			//	success: function(data){}
+				data: students,
+				success: function(data){
+					console.log(data);				
+				}
 			});
 		});
 	</script>
@@ -130,15 +136,14 @@ body {
 	<script>
 		$('#getUserInfoBtn').click(function(){
 			var userNo = $('#userNo').val();
+			var resultStr ="";
 			
 			$.ajax({
 				url:'jQueryTest5.do',
+// 				dataType :"json",
 				data: {userNo:userNo},
 				success:function(data){
 					console.log(data);
-					
-					var resultStr ="";
-					
 					if(data != null){
 						resultStr = data.userNo + ", " + data.userName + ", " + data.userNation;
 					} else {
@@ -147,8 +152,11 @@ body {
 					
 					$('#p3').text(resultStr);
 					$('#textarea3').val(resultStr);
-					
-					
+				},
+				error: function(){
+					resultStr ="유효하지 않은 번호를 입력하셨습니다. 숫자를 입력해주세요";
+					$('#p3').text(resultStr);
+					$('#textarea3').val(resultStr);
 				}
 			});
 		});
@@ -229,8 +237,7 @@ body {
 						resultStr += user.userNo + ", " 
 								  + user.userName + ", " 
 								  + user.userNation + "\n";
-					}
-					
+										
 					$('#textarea6').val(resultStr);
 				}
 			});

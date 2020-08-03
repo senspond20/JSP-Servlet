@@ -1,6 +1,7 @@
 package ajax.jquery.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,11 +16,14 @@ public class JQueryAjaxServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String name = req.getParameter("name");
 		System.out.println(name);
+		resp.setCharacterEncoding("UTF-8");
+		resp.getWriter().println(name);
+//		resp.getWriter().println(URLDecoder.decode(name));
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		super.doGet(req, resp);
 	}
 }

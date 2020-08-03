@@ -44,35 +44,71 @@ public class JQueryAjaxServlet5 extends HttpServlet {
 		userList.add(new User(6,"알베르토 몬디","이탈리아"));
 		userList.add(new User(7,"샘 오취리","가나"));
 		
-		int userNo = Integer.parseInt(request.getParameter("userNo"));
-		
-		User user = null;
-		for(int i =0;i<userList.size();i++) {
-			if(userList.get(i).getUserNo() == userNo) {
-				user = userList.get(i);
-				break;
-			}
-		}
-		
-		JSONObject userObj = null;  // null에 put하면 안됨
-		if(user != null) {
-			userObj = new JSONObject();  
-			
-			userObj.put("userNo", user.getUserNo());
-			userObj.put("userName", user.getUserName());
-			userObj.put("userNation", user.getUserNation());
-		}
-		
-		System.out.println(userObj);
+//		int userNo = Integer.parseInt(request.getParameter("userNo"));
+//		
+//		User user = null;
+//		for(int i =0;i<userList.size();i++) {
+//			if(userList.get(i).getUserNo() == userNo) {
+//				user = userList.get(i);
+//				break;
+//			}
+//		}
+//		
+//		JSONObject userObj = null;  // null에 put하면 안됨
+//		if(user != null) {
+//			userObj = new JSONObject();  
+//			
+//			userObj.put("userNo", user.getUserNo());
+//			userObj.put("userName", user.getUserName());
+//			userObj.put("userNation", user.getUserNation());
+//		}
+//		
+//		System.out.println(userObj);
+//		
+//		//JSON은 contentType 따로 지정 해줘야함
+//		response.setContentType("application/json; charset=UTF-8");
+//		
+//		PrintWriter out = response.getWriter();
+//		out.println(userObj);
+//		
+//		out.flush();
+//		out.close();
 		
 		//JSON은 contentType 따로 지정 해줘야함
+		// 순서 주의 setContentType 가 printWriter out 보다 위에 있어야 한글이 정상적으로 나온다.
 		response.setContentType("application/json; charset=UTF-8");
-		
 		PrintWriter out = response.getWriter();
-		out.println(userObj);
 		
-		out.flush();
-		out.close();
+		try {
+			int userNo = Integer.parseInt(request.getParameter("userNo"));
+		
+			User user = null;
+			for(int i =0;i<userList.size();i++) {
+				if(userList.get(i).getUserNo() == userNo) {
+					user = userList.get(i);
+					break;
+				}
+			}
+			
+			JSONObject userObj = null;  // null에 put하면 안됨
+			if(user != null) {
+				userObj = new JSONObject();  		
+				userObj.put("userNo", user.getUserNo());
+				userObj.put("userName", user.getUserName());
+				userObj.put("userNation", user.getUserNation());
+			}
+			
+			System.out.println(userObj);
+			out.println(userObj);		
+		}catch(Exception e){
+			System.out.println("잘못된 입력");
+		}finally {
+			out.flush();
+			out.close();
+		}
+
+		
+		
 		
 	}
 

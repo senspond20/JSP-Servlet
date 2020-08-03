@@ -31,7 +31,11 @@ public class JQueryAjaxServlet4 extends HttpServlet {
 		String student2 = request.getParameter("student2");
 		String student3 = request.getParameter("student3");
 		
-		System.out.println("수업을 들을 학생은 " + student1 + ", " + student2 + ", " + student3 + "학생입니다.");
+		String result = "수업을 들을 학생은 " + student1 + ", " + student2 + ", " + student3 + "학생입니다.";
+		System.out.println(result);
+		
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().println(result);
 	}
 
 	/**
